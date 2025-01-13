@@ -199,7 +199,7 @@ simulation_params = {
     'step_height':                 0.3 * hip_height,  # 0.05 go2
 
     # Visual Foothold adapatation
-    "visual_foothold_adaptation":  'blind', #'blind', 'height', 'vfa'
+    "visual_foothold_adaptation":  'height', #'blind', 'height', 'vfa'
 
     # this is the integration time used in the simulator
     'dt':                          0.002,
@@ -224,7 +224,7 @@ simulation_params = {
 
     'use_inertia_recomputation':   True,
 
-    'scene':                       'flat',  # flat, rough, stairs, random_boxes, random_pyramids, suspend_stairs, slope, perlin, image
+    'scene':                       'random_boxes',  # flat, rough, stairs, random_boxes, random_pyramids, suspend_stairs, slope, perlin, image
 
     }
 # -----------------------------------------------------------------------

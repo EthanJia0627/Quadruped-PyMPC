@@ -11,6 +11,7 @@ from quadruped_pympc.helpers.periodic_gait_generator import PeriodicGaitGenerato
 from quadruped_pympc.helpers.swing_trajectory_controller import SwingTrajectoryController
 from quadruped_pympc.helpers.terrain_estimator import TerrainEstimator
 from quadruped_pympc.helpers.inverse_kinematics.inverse_kinematics_numeric import InverseKinematicsNumeric
+from quadruped_pympc.helpers.early_stance_detector import EarlyStanceDetector
 
 if(cfg.simulation_params['visual_foothold_adaptation'] != 'blind'):
     from quadruped_pympc.helpers.visual_foothold_adaptation import VisualFootholdAdaptation
@@ -25,7 +26,8 @@ class WBInterface:
 
     def __init__(self,
                  initial_feet_pos: LegsAttr,
-                 legs_order: tuple[str, str, str, str] = ('FL', 'FR', 'RL', 'RR')):
+                 legs_order: tuple[str, str, str, str] = ('FL', 'FR', 'RL', 'RR'),
+                 feet_geom_id : LegsAttr = None):
         """ Constructor of the WBInterface class
 
         Args:
@@ -87,6 +89,8 @@ class WBInterface:
 
         self.current_contact = np.array([1, 1, 1, 1])
 
+        # early stance detector -------------------------------------------------------------------
+        self.esd = EarlyStanceDetector(feet_geom_id)
 
     
     def update_state_and_reference(self,
@@ -396,6 +400,9 @@ class WBInterface:
         des_foot_pos = LegsAttr(*[np.zeros((3,)) for _ in range(4)])
         des_foot_vel = LegsAttr(*[np.zeros((3,)) for _ in range(4)])
         
+        # TODO Detect the early stance
+        # self.esd.update(movement_direction, contact, lift_off, touch_down)
+
         if(cfg.mpc_params['type'] != 'kinodynamic'):
             # The swing controller is in the end-effector space 
             for leg_id, leg_name in enumerate(self.legs_order):
