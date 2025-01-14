@@ -352,7 +352,8 @@ class WBInterface:
                                         nmpc_joints_pos,
                                         nmpc_joints_vel,
                                         nmpc_joints_acc,
-                                        nmpc_predicted_state) -> LegsAttr:
+                                        nmpc_predicted_state,
+                                        contact) -> LegsAttr:
         """Compute the stance and swing torque.
 
         Args:
@@ -400,8 +401,7 @@ class WBInterface:
         des_foot_pos = LegsAttr(*[np.zeros((3,)) for _ in range(4)])
         des_foot_vel = LegsAttr(*[np.zeros((3,)) for _ in range(4)])
         
-        # TODO Detect the early stance
-        # self.esd.update(movement_direction, contact, lift_off, touch_down)
+        self.esd.update(contact, feet_pos ,lift_off = self.frg.lift_off_positions, touch_down = nmpc_footholds)
 
         if(cfg.mpc_params['type'] != 'kinodynamic'):
             # The swing controller is in the end-effector space 
