@@ -34,7 +34,7 @@ class EarlyStanceDetector:
                         break
                     else:
                         self.early_stance[leg_name] = False
-        print(self.early_stance)
+
 
     def contact_points(self, leg_name):
         """
