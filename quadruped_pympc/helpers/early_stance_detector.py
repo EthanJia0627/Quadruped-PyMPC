@@ -50,6 +50,6 @@ class EarlyStanceDetector:
         contact_id = np.where(np.any(self.contact.geom == self.feet_geom_id[leg_name],axis=1))
         # check contact_id is not empty
         if contact_id[0].size > 0:
-            for i in range(len(contact_id)):
-                contact_points.append(self.contact.pos[contact_id[i]])
+            for i in range(contact_id[0].size):
+                contact_points.append(self.contact.pos[contact_id[0][i]])
         return contact_points
