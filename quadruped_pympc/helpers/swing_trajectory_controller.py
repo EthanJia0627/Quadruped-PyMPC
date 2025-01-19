@@ -1,6 +1,6 @@
 import os
 import numpy as np
-
+from quadruped_pympc.helpers.early_stance_detector import EarlyStanceDetector
 class SwingTrajectoryController:
     def __init__(self,
                  step_height: float,
@@ -50,7 +50,8 @@ class SwingTrajectoryController:
                               foot_pos,
                               foot_vel,
                               h,
-                              mass_matrix):
+                              mass_matrix,
+                              early_stance_detector:EarlyStanceDetector):
         """TODO: Docstring.
 
         Args:
@@ -73,10 +74,14 @@ class SwingTrajectoryController:
 
         """
         # Compute trajectory references
+        leg_name = early_stance_detector.legs_order[leg_id]
+
         des_foot_pos, des_foot_vel, des_foot_acc = self.swing_generator.compute_trajectory_references(
             self.swing_time[leg_id],
             lift_off,
-            touch_down
+            touch_down,
+            hitpoint = early_stance_detector.hitpoints[leg_name],
+            hitmoment = early_stance_detector.hitmoments[leg_name]
             )
 
         err_pos = des_foot_pos - foot_pos

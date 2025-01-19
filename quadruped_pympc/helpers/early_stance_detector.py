@@ -8,9 +8,11 @@ class EarlyStanceDetector:
         self.legs_order = legs_order
         self.feet_geom_id = feet_geom_id
         self.early_stance = LegsAttr( FL=False, FR=False, RR=False, RL=False )
+        self.hitmoments = LegsAttr(FL=-1.0, FR=-1.0, RR=-1.0, RL=-1.0) # swing time of the last contact moment
+        self.hitpoints = LegsAttr(FL=None, FR=None, RR=None, RL=None)
         self.contact = None
 
-    def update(self,contact,feet_pos:LegsAttr,lift_off:LegsAttr, touch_down:LegsAttr):
+    def update(self,contact,feet_pos:LegsAttr,lift_off:LegsAttr, touch_down:LegsAttr,swing_time:list):
         """ 
         Update the early stance detector.
         
@@ -31,10 +33,14 @@ class EarlyStanceDetector:
                     local_disp = (contact_point - feet_pos[leg_name]).squeeze()
                     if np.arccos(np.dot(disp, local_disp) / (np.linalg.norm(disp) * np.linalg.norm(local_disp))) < np.pi/3: 
                         self.early_stance[leg_name] = True  # acos( disp dot local_disp / |disp| |local_disp|) < 60°
+                        self.hitmoments[leg_name] = swing_time[leg_id]
+                        self.hitpoints[leg_name] = contact_point
                         break
                     else:
                         self.early_stance[leg_name] = False
-
+            if self.early_stance[leg_name] != True:
+                self.hitmoments[leg_name] = -1.0
+                self.hitpoints[leg_name] = None
 
     def contact_points(self, leg_name):
         """

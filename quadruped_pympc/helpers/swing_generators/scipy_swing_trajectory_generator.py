@@ -21,20 +21,27 @@ class SwingTrajectoryGenerator:
 
 
 
-    def createCurve(self, x0, xf):
+    def createCurve(self, x0, xf, hitmoment = -1):
 
         #scaling_factor = 0.7105
         scaling_factor = 1.5
+        if hitmoment != -1 and hitmoment < self.swing_period*0.9:
+            p1 = x0.copy()
+            p1[:2] = x0[:2] -0.5 * (xf[:2]-x0[:2])
+            p1 += np.array([0., 0., self.stepHeight / scaling_factor])
+            updated_swing_period = self.swing_period - hitmoment
+            t = np.array([hitmoment, hitmoment+updated_swing_period/4, hitmoment+updated_swing_period/2, hitmoment+updated_swing_period*3/4, self.swing_period])
+        else:
+            p1 = x0 + np.array([0., 0., self.stepHeight / scaling_factor])
+            t = np.array([0, self.half_swing_period/2, self.half_swing_period, self.half_swing_period*3/2, self.half_swing_period*2])
         
-        p1 = x0 + np.array([0., 0., self.stepHeight / scaling_factor])
         p2 = 0.5 * (x0 + xf) + np.array([0., 0., self.stepHeight ])
-        p3 = xf + np.array([0., 0., self.stepHeight / scaling_factor])
-        
-        
+        p3 = xf + np.array([0., 0., self.stepHeight / scaling_factor])  
+
         x = np.array([x0[0], p1[0], p2[0], p3[0], xf[0]])
         y = np.array([x0[1], p1[1], p2[1], p3[1], xf[1]])
         z = np.array([x0[2], p1[2], p2[2], p3[2], xf[2]])
-        t = np.array([0, self.half_swing_period/2, self.half_swing_period, self.half_swing_period*3/2, self.half_swing_period*2])
+        
         self._curve_x = CubicSpline(t, x, bc_type=["clamped", "clamped"])
         self._curve_y = CubicSpline(t, y, bc_type=["clamped", "clamped"])
         self._curve_z = CubicSpline(t, z, bc_type=["clamped", "clamped"])
@@ -72,10 +79,16 @@ class SwingTrajectoryGenerator:
     def compute_trajectory_references(self,
                                       swing_time: float,
                                       lift_off: np.array,
-                                      touch_down: np.array) -> (np.array, np.array, np.array):
+                                      touch_down: np.array,
+                                      hitpoint = None,
+                                      hitmoment = -1) -> (np.array, np.array, np.array):
 
         #if(swing_time == 0):
-        self.createCurve(lift_off, touch_down)
+        if hitpoint is not None:
+            self.createCurve(hitpoint, touch_down, hitmoment)
+            # self.plot_current_curve(hitmoment)
+        else:
+            self.createCurve(lift_off, touch_down)
 
         position_x = self._curve_x(swing_time)
         position_y = self._curve_y(swing_time)
@@ -151,6 +164,22 @@ class SwingTrajectoryGenerator:
         plt.tight_layout()
         plt.show()
 
+    def plot_current_curve(self,start_time=0):
+
+        t = np.linspace(start_time, self.swing_period, 100)
+        x = self._curve_x(t)
+        y = self._curve_y(t)
+        z = self._curve_z(t)
+
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.plot(x, y, z)
+        ax.legend()
+        # start point
+        ax.scatter(x[0], y[0], z[0], c='r', marker='o')
+        
+        plt.title('3D Curve')
+        plt.show()
 
 
 
