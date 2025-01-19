@@ -1,7 +1,7 @@
 import numpy as np
 from quadruped_pympc import config as cfg
 from gym_quadruped.utils.quadruped_utils import LegsAttr
-EARLY_STANCE_THRESHOLD = 0.1
+EARLY_STANCE_THRESHOLD = 0.05
 class EarlyStanceDetector:
     def __init__(self, feet_geom_id,
                  legs_order: tuple[str, str, str, str] = ('FL', 'FR', 'RL', 'RR')):
