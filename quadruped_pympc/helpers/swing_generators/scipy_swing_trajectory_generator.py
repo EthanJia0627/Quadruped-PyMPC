@@ -29,13 +29,15 @@ class SwingTrajectoryGenerator:
             p1 = x0.copy()
             p1[:2] = x0[:2] -0.5 * (xf[:2]-x0[:2])
             p1 += np.array([0., 0., self.stepHeight / scaling_factor])
+            p2 = 0.5 * (x0 + xf) + np.array([0., 0., 1.2*self.stepHeight ])
             updated_swing_period = self.swing_period - hitmoment
             t = np.array([hitmoment, hitmoment+updated_swing_period/4, hitmoment+updated_swing_period/2, hitmoment+updated_swing_period*3/4, self.swing_period])
         else:
             p1 = x0 + np.array([0., 0., self.stepHeight / scaling_factor])
+            p2 = 0.5 * (x0 + xf) + np.array([0., 0., self.stepHeight ])
             t = np.array([0, self.half_swing_period/2, self.half_swing_period, self.half_swing_period*3/2, self.half_swing_period*2])
         
-        p2 = 0.5 * (x0 + xf) + np.array([0., 0., self.stepHeight ])
+        
         p3 = xf + np.array([0., 0., self.stepHeight / scaling_factor])  
 
         x = np.array([x0[0], p1[0], p2[0], p3[0], xf[0]])
