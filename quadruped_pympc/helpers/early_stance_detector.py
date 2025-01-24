@@ -31,16 +31,16 @@ class EarlyStanceDetector:
                     break
                 else:
                     local_disp = (contact_point - feet_pos[leg_name]).squeeze()
-                    if np.arccos(np.dot(disp, local_disp) / (np.linalg.norm(disp) * np.linalg.norm(local_disp))) < np.pi/3: 
-                        if self.early_stance[leg_name] == False:
-                            self.hitpoints[leg_name] = contact_point
+                    if self.early_stance[leg_name] == False:
+                        if np.arccos(np.dot(disp, local_disp) / (np.linalg.norm(disp) * np.linalg.norm(local_disp))) < np.pi/3: 
+                            self.hitpoints[leg_name] = contact_point.copy()
                             self.hitmoments[leg_name] = swing_time[leg_id]
-                        self.early_stance[leg_name] = True  # acos( disp dot local_disp / |disp| |local_disp|) < 60°
-                        break
-                    else:
-                        self.early_stance[leg_name] = False
-                        self.hitmoments[leg_name] = -1.0
-                        self.hitpoints[leg_name] = None
+                            self.early_stance[leg_name] = True  # acos( disp dot local_disp / |disp| |local_disp|) < 60°
+                            break
+                        else:
+                            self.early_stance[leg_name] = False
+                            self.hitmoments[leg_name] = -1.0
+                            self.hitpoints[leg_name] = None
             if self.early_stance[leg_name] != True:
                 self.hitmoments[leg_name] = -1.0
                 self.hitpoints[leg_name] = None
