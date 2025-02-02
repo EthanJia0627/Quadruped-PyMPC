@@ -27,7 +27,7 @@ class EarlyStanceDetector:
             disp = touch_down[leg_name] - lift_off[leg_name]
             for contact_point in contact_points:
                 # if np.linalg.norm(contact_point - touch_down[leg_name]) < EARLY_STANCE_THRESHOLD or np.linalg.norm(contact_point - lift_off[leg_name]) < EARLY_STANCE_THRESHOLD:
-                if swing_time[leg_id] < 0.1 or swing_time[leg_id] > swing_period - 0.1:
+                if swing_time[leg_id] < EARLY_STANCE_THRESHOLD or swing_time[leg_id] > swing_period - EARLY_STANCE_THRESHOLD:
                     self.early_stance[leg_name] = False  # reset early stance if contact point is close to touch down position or lift off position
                     break
                 else:
