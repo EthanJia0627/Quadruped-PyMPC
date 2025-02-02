@@ -12,7 +12,7 @@ class EarlyStanceDetector:
         self.hitpoints = LegsAttr(FL=None, FR=None, RR=None, RL=None)
         self.contact = None
 
-    def update(self,contact,feet_pos:LegsAttr,lift_off:LegsAttr, touch_down:LegsAttr,swing_time:list):
+    def update(self,contact,feet_pos:LegsAttr,lift_off:LegsAttr, touch_down:LegsAttr, swing_time:list, swing_period:float):
         """ 
         Update the early stance detector.
         
@@ -26,7 +26,8 @@ class EarlyStanceDetector:
             contact_points = self.contact_points(leg_name)
             disp = touch_down[leg_name] - lift_off[leg_name]
             for contact_point in contact_points:
-                if np.linalg.norm(contact_point - touch_down[leg_name]) < EARLY_STANCE_THRESHOLD or np.linalg.norm(contact_point - lift_off[leg_name]) < EARLY_STANCE_THRESHOLD:
+                # if np.linalg.norm(contact_point - touch_down[leg_name]) < EARLY_STANCE_THRESHOLD or np.linalg.norm(contact_point - lift_off[leg_name]) < EARLY_STANCE_THRESHOLD:
+                if swing_time[leg_id] < 0.1 or swing_time[leg_id] > swing_period - 0.1:
                     self.early_stance[leg_name] = False  # reset early stance if contact point is close to touch down position or lift off position
                     break
                 else:

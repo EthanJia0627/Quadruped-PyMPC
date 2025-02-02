@@ -401,7 +401,7 @@ class WBInterface:
         des_foot_pos = LegsAttr(*[np.zeros((3,)) for _ in range(4)])
         des_foot_vel = LegsAttr(*[np.zeros((3,)) for _ in range(4)])
         
-        self.esd.update(contact, feet_pos ,lift_off = self.frg.lift_off_positions, touch_down = nmpc_footholds ,swing_time = self.stc.swing_time)
+        self.esd.update(contact, feet_pos ,lift_off = self.frg.lift_off_positions, touch_down = nmpc_footholds ,swing_time = self.stc.swing_time ,swing_period = self.stc.swing_period)
 
         if(cfg.mpc_params['type'] != 'kinodynamic'):
             # The swing controller is in the end-effector space 
