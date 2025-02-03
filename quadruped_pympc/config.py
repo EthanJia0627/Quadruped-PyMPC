@@ -197,9 +197,12 @@ simulation_params = {
     'swing_velocity_gain_fb':      100,
     'swing_integral_gain_fb':      0,
     'step_height':                 0.3 * hip_height,  # 0.05 go2
+    'randomize_joint_friction':    1.0,
+    'randomize_joint_damping':     5.0,
+    'randomize_joint_stiffness':   None,
 
     # Visual Foothold adapatation
-    "visual_foothold_adaptation":  'height', #'blind', 'height', 'vfa'
+    "visual_foothold_adaptation":  'blind', #'blind', 'height', 'vfa'
 
     # this is the integration time used in the simulator
     'dt':                          0.002,
