@@ -229,5 +229,7 @@ simulation_params = {
 
     'scene':                       'random_boxes',  # flat, rough, stairs, random_boxes, random_pyramids, suspend_stairs, slope, perlin, image
 
+    # Network parameters
+    'network':                     'lstm',  # 'mlp', 'lstm'
     }
 # -----------------------------------------------------------------------
