@@ -6,7 +6,7 @@ from quadruped_pympc.helpers.quadruped_utils import GaitType
 
 # These are used both for a real experiment and a simulation -----------
 # These are the only attributes needed per quadruped, the rest can be computed automatically ----------------------
-robot = 'aliengo'  # 'go1', 'go2', 'b2', 'aliengo', 'hyqreal', 'mini_cheetah'  # TODO: Load from robot_descriptions.py
+robot = 'b2'  # 'go1', 'go2', 'b2', 'aliengo', 'hyqreal', 'mini_cheetah'  # TODO: Load from robot_descriptions.py
 robot_leg_joints = dict(FL=['FL_hip_joint', 'FL_thigh_joint', 'FL_calf_joint',],  # TODO: Make configs per robot.
                         FR=['FR_hip_joint', 'FR_thigh_joint', 'FR_calf_joint',],
                         RL=['RL_hip_joint', 'RL_thigh_joint', 'RL_calf_joint',],
@@ -193,13 +193,13 @@ mpc_params = {
 
 simulation_params = {
     'swing_generator':             'scipy',  # 'scipy', 'explicit', 'ndcurves'
-    'swing_position_gain_fb':      5000,
-    'swing_velocity_gain_fb':      100,
+    'swing_position_gain_fb':      500, # 5000/500  aliengo/b2
+    'swing_velocity_gain_fb':      10,  # 100/10    aliengo/b2
     'swing_integral_gain_fb':      0,
     'step_height':                 0.3 * hip_height,  # 0.05 go2
-    'randomize_joint_friction':    1.0,
-    'randomize_joint_damping':     5.0,
-    'randomize_joint_stiffness':   None,
+    'randomize_joint_friction':    None,    # 1.0,
+    'randomize_joint_damping':     None,    # 5.0,
+    'randomize_joint_stiffness':   None,    
 
     # Visual Foothold adapatation
     "visual_foothold_adaptation":  'blind', #'blind', 'height', 'vfa'

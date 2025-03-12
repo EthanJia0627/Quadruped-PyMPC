@@ -115,7 +115,7 @@ def run_simulation(process=0, num_episodes=500, return_dict=None, seed_number=0,
                                         'swing_time', 'phase_signal', 'lift_off_positions')
     
     quadrupedpympc_wrapper = QuadrupedPyMPC_Wrapper(initial_feet_pos=env.feet_pos, legs_order=legs_order,
-                                                    quadrupedpympc_observables_names = quadrupedpympc_observables_names)
+                                                    quadrupedpympc_observables_names = quadrupedpympc_observables_names,feet_geom_id=env._feet_geom_id)
 
 
     # --------------------------------------------------------------
@@ -180,7 +180,7 @@ def run_simulation(process=0, num_episodes=500, return_dict=None, seed_number=0,
                                                     heightmaps,
                                                     legs_order, simulation_dt, ref_base_lin_vel, ref_base_ang_vel,
                                                     env.step_num, qpos, qvel, feet_jac, jac_feet_dot, feet_vel, legs_qfrc_bias,
-                                                    legs_mass_matrix, legs_qpos_idx, legs_qvel_idx, tau, inertia)
+                                                    legs_mass_matrix, legs_qpos_idx, legs_qvel_idx, tau, inertia,env.mjData.contact)
             # Limit tau between tau_limits
             for leg in ["FL", "FR", "RL", "RR"]:
                 tau_min, tau_max = tau_limits[leg][:, 0], tau_limits[leg][:, 1]
@@ -220,6 +220,7 @@ def run_simulation(process=0, num_episodes=500, return_dict=None, seed_number=0,
                 # Plot the swing trajectory
                 feet_traj_geom_ids = plot_swing_mujoco(viewer=env.viewer,
                                                        swing_traj_controller=quadrupedpympc_wrapper.wb_interface.stc,
+                                                       early_stance_detector=quadrupedpympc_wrapper.wb_interface.esd,
                                                        swing_period=quadrupedpympc_wrapper.wb_interface.stc.swing_period,
                                                        swing_time=LegsAttr(FL=quadrupedpympc_observables["swing_time"][0],
                                                                            FR=quadrupedpympc_observables["swing_time"][1],

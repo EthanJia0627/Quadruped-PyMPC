@@ -17,7 +17,8 @@ class QuadrupedPyMPC_Wrapper:
     def __init__(self, 
                  initial_feet_pos: LegsAttr, 
                  legs_order: tuple[str, str, str, str] = ('FL', 'FR', 'RL', 'RR'), 
-                 quadrupedpympc_observables_names: tuple[str, ...] = _DEFAULT_OBS):
+                 quadrupedpympc_observables_names: tuple[str, ...] = _DEFAULT_OBS,
+                 feet_geom_id = None):
         """ Constructor of the QuadrupedPyMPC_Wrapper class.
 
         Args:
@@ -34,7 +35,7 @@ class QuadrupedPyMPC_Wrapper:
             self.srbd_batched_controller_interface = SRBDBatchedControllerInterface()
 
         self.wb_interface = WBInterface(initial_feet_pos = initial_feet_pos(frame='world'),
-                                                            legs_order = legs_order)
+                                                            legs_order = legs_order,feet_geom_id=feet_geom_id)
         
 
         self.nmpc_GRFs = LegsAttr(FL=np.zeros(3), FR=np.zeros(3),
@@ -80,7 +81,8 @@ class QuadrupedPyMPC_Wrapper:
                         legs_qpos_idx: LegsAttr,
                         legs_qvel_idx: LegsAttr, 
                         tau: LegsAttr, 
-                        inertia: np.ndarray) -> LegsAttr:
+                        inertia: np.ndarray,
+                        contact) -> LegsAttr:
         """ Given the current state of the robot (and the reference), 
             compute the torques to be applied to the motors.
 
@@ -189,7 +191,8 @@ class QuadrupedPyMPC_Wrapper:
                                                             self.nmpc_joints_pos,
                                                             self.nmpc_joints_vel,
                                                             self.nmpc_joints_acc,
-                                                            self.nmpc_predicted_state)
+                                                            self.nmpc_predicted_state,
+                                                            contact)
         
 
 
