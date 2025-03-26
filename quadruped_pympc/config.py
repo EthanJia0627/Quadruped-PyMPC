@@ -227,9 +227,13 @@ simulation_params = {
 
     'use_inertia_recomputation':   True,
 
-    'scene':                       'random_boxes',  # flat, rough, stairs, random_boxes, random_pyramids, suspend_stairs, slope, perlin, image
+    'scene':                       'flat',  # flat, rough, stairs, random_boxes, random_pyramids, suspend_stairs, slope, perlin, image
 
     # Network parameters
     'network':                     'lstm',  # 'mlp', 'lstm'
+
+    'pre_trained_model':           'flat',
+
+    'trained_model':               'flat',
     }
 # -----------------------------------------------------------------------
